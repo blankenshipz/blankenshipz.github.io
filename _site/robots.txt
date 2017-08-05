@@ -1,1 +1,1 @@
-Sitemap: https://blankenshipz.com//sitemap.xml
+Sitemap: https://blankenshipz.github.io//sitemap.xml

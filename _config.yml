@@ -4,7 +4,7 @@ email: zach.blankenship@gmail.com
 author: Zach Blankenship
 description: "Reverie's on programming and life"
 baseurl:     "/"
-url:         "https://blankenshipz.github.io"
+url:         "http://blankenshipz.com"
 date_format: "%b %-d, %Y"
 header_pages:
   - about.md

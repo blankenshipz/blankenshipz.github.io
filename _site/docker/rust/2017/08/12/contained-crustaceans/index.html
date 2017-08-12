@@ -1,19 +1,130 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title></title>
-    <link>http://blankenshipz.com</link>
-    <description>
-      Reverie's on programming and life
-    </description>
+<!DOCTYPE html>
+<html>
+<head>
     
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Contained Crustaceans &#8211; Opus</title>
+    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Setting up a development environment with docker for rust">
+    <meta name="robots" content="all">
+    <meta name="author" content="Zach Blankenship">
+    
+    <meta name="keywords" content="docker, rust">
+    <link rel="canonical" href="http://blankenshipz.com//docker/rust/2017/08/12/contained-crustaceans/">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Opus" href="//feed.xml" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="//css/pixyll.css?201708121303" type="text/css">
+
+    <!-- Fonts -->
+    
+    <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
+    
+    
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    
+
+    <!-- MathJax -->
+    
+
+    <!-- Verifications -->
+    
+    
+
+    <!-- Open Graph -->
+    <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Contained Crustaceans">
+    <meta property="og:description" content="Reverie's on programming and life">
+    <meta property="og:url" content="http://blankenshipz.com/docker/rust/2017/08/12/contained-crustaceans/">
+    <meta property="og:site_name" content="Opus">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="@blankenshipz" />
+        <meta name="twitter:creator" content="@blankenshipz" />
+    
+    <meta name="twitter:title" content="Contained Crustaceans" />
+    <meta name="twitter:description" content="Setting up a development environment with docker for rust" />
+    <meta name="twitter:url" content="http://blankenshipz.com/docker/rust/2017/08/12/contained-crustaceans/" />
+    
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+
+    
+</head>
+
+<body class="site">
+  
+	
+
+  <div class="site-wrap">
+    <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="http://blankenshipz.com" class="site-title">Opus</a>
+      <nav class="site-nav">
         
-            <item>
-                <title>Contained Crustaceans</title>
-                <link>http://blankenshipz.com/docker/rust/2017/08/12/contained-crustaceans/</link>
-                <content:encoded>
-                    <![CDATA[
-                    <p>While <a href="http://www.rustacean.net/">Ferris</a> the crab is a <a href="https://www.britannica.com/animal/crustacean">crustacean</a> and  <a href="https://blog.docker.com/2013/10/call-me-moby-dock/">Moby Dock</a>, the whale, is a mammal; they’re both marine life and they share the moniker of “cartoon” putting them in a category where it might benefit them to stick together!</p>
+
+
+
+    
+    
+    
+    
+        <a href="/about/">About</a>
+    
+
+    
+
+
+      </nav>
+      <div class="clearfix"></div>
+      
+    </div>
+  </div>
+</header>
+
+
+    <div class="post p2 p-responsive wrap" role="main">
+      <div class="measure">
+        
+
+
+<div class="post-header mb2">
+  <h1>Contained Crustaceans</h1>
+  <span class="post-meta">Aug 12, 2017</span><br>
+  
+  <span class="post-meta small">
+  
+    7 minute read
+  
+  </span>
+</div>
+
+<article class="post-content">
+  <p>While <a href="http://www.rustacean.net/">Ferris</a> the crab is a <a href="https://www.britannica.com/animal/crustacean">crustacean</a> and  <a href="https://blog.docker.com/2013/10/call-me-moby-dock/">Moby Dock</a>, the whale, is a mammal; they’re both marine life and they share the moniker of “cartoon” putting them in a category where it might benefit them to stick together!</p>
 
 <h4 id="environmental-concerns">Environmental Concerns</h4>
 <p>I’ve been using versions of the <code class="highlighter-rouge">Docker</code> toolchain in development for a few years now<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>, and overall I’ve enjoyed the experience. It’s a great way to create a consistent environment for your application (and your peers). When I first started developing with <code class="highlighter-rouge">ruby</code> it was common practice to use something like <a href="https://rvm.io/"><code class="highlighter-rouge">rvm</code></a> or <a href="https://github.com/rbenv/rbenv"><code class="highlighter-rouge">rbenv</code></a> to contextually switch <code class="highlighter-rouge">ruby</code> versions based on some configuration in the application. The <code class="highlighter-rouge">rust</code> community has something similair with <a href="https://github.com/rust-lang-nursery/rustup.rs"><code class="highlighter-rouge">rustup</code></a><sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> it provides a way to switch<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> the version of <code class="highlighter-rouge">rust</code> so that the application can be appropriatly compiled with the intended version of the compiler.</p>
@@ -183,18 +294,56 @@ CMD ["cargo", "build"]
   </ol>
 </div>
 
-                    ]]>
-                </content:encoded>
-                <guid isPermaLink="false">/docker/rust/2017/08/12/contained-crustaceans/</guid>
-                <description>
-                    
-                    Setting up a development environment with docker for rust
-                    
-                </description>
-                <pubDate>Sat, 12 Aug 2017 13:28:00 -0500</pubDate>
-                <author>Zach Blankenship</author>
-            </item>
-        
+</article>
+
+
+  <div class="share-page">
+  Share this post!
+
+  <div class="share-links">
     
-  </channel>
-</rss>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="center">
+  <div class="measure">
+    <small>
+    </small>
+  </div>
+</footer>
+
+
+</body>
+</html>

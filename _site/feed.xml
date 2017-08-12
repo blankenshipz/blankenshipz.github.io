@@ -6,5 +6,182 @@
     <link>http://blankenshipz.com//</link>
     <atom:link href="http://blankenshipz.com//feed.xml" rel="self" type="application/rss+xml" />
     
+      <item>
+        <title>Contained Crustaceans</title>
+        <description>&lt;p&gt;While &lt;a href=&quot;http://www.rustacean.net/&quot;&gt;Ferris&lt;/a&gt; the crab is a &lt;a href=&quot;https://www.britannica.com/animal/crustacean&quot;&gt;crustacean&lt;/a&gt; and  &lt;a href=&quot;https://blog.docker.com/2013/10/call-me-moby-dock/&quot;&gt;Moby Dock&lt;/a&gt;, the whale, is a mammal; they’re both marine life and they share the moniker of “cartoon” putting them in a category where it might benefit them to stick together!&lt;/p&gt;
+
+&lt;h4 id=&quot;environmental-concerns&quot;&gt;Environmental Concerns&lt;/h4&gt;
+&lt;p&gt;I’ve been using versions of the &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; toolchain in development for a few years now&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;, and overall I’ve enjoyed the experience. It’s a great way to create a consistent environment for your application (and your peers). When I first started developing with &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt; it was common practice to use something like &lt;a href=&quot;https://rvm.io/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rvm&lt;/code&gt;&lt;/a&gt; or &lt;a href=&quot;https://github.com/rbenv/rbenv&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rbenv&lt;/code&gt;&lt;/a&gt; to contextually switch &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt; versions based on some configuration in the application. The &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; community has something similair with &lt;a href=&quot;https://github.com/rust-lang-nursery/rustup.rs&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rustup&lt;/code&gt;&lt;/a&gt;&lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt; it provides a way to switch&lt;sup id=&quot;fnref:3&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt; the version of &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; so that the application can be appropriatly compiled with the intended version of the compiler.&lt;/p&gt;
+
+&lt;p&gt;Although this type of context switching can be extremely useful it is unlikely that the compiler version is the &lt;em&gt;only&lt;/em&gt; thing your application will rely on in its build environment as it matures. You may also have some specific package or file dependency like: &lt;code class=&quot;highlighter-rouge&quot;&gt;openssh&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;curl&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;libssh2&lt;/code&gt; or a file named &lt;code class=&quot;highlighter-rouge&quot;&gt;foo&lt;/code&gt; and while many systems might meet these dependencies, and perhaps you can easily&lt;sup id=&quot;fnref:4&quot;&gt;&lt;a href=&quot;#fn:4&quot; class=&quot;footnote&quot;&gt;4&lt;/a&gt;&lt;/sup&gt; facilitate them in your development environment, &lt;a href=&quot;https://en.wikipedia.org/wiki/Murphy%27s_law&quot;&gt;Murphy’s Law&lt;/a&gt; tells us that your coworker and &lt;a href=&quot;https://www.thoughtworks.com/continuous-integration&quot;&gt;CI server&lt;/a&gt; are going to flounder.&lt;/p&gt;
+
+&lt;h4 id=&quot;much-ado-about-docker&quot;&gt;Much Ado About Docker&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; or more specifically “containerization” is the trending solution to this problem and with good reason. Think of a “running” container as an executing instance of your application passing the cycles sheltered from the whims and woes of other processes and attached to a filesystem that meets its wildest dreams. It’s the pack up your stuff and live your days on a beach version of the process lifecycle.&lt;sup id=&quot;fnref:5&quot;&gt;&lt;a href=&quot;#fn:5&quot; class=&quot;footnote&quot;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;my-container-is-rusting&quot;&gt;My Container is Rusting…&lt;/h4&gt;
+&lt;p&gt;We can containerize &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; applications to reep the benefits of our beach life (hopefully without the sand) and to do so all we really need is a &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;&lt;sup id=&quot;fnref:6&quot;&gt;&lt;a href=&quot;#fn:6&quot; class=&quot;footnote&quot;&gt;6&lt;/a&gt;&lt;/sup&gt;. If you haven’t installed &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; yet take a second to &lt;a href=&quot;https://docs.docker.com/engine/installation/&quot;&gt;visit the docs&lt;/a&gt; for installation instructions for your system.&lt;/p&gt;
+
+&lt;p&gt;There are several prebuilt images for rust available on the &lt;a href=&quot;https://hub.docker.com/search/?isAutomated=0&amp;amp;isOfficial=0&amp;amp;page=1&amp;amp;pullCount=0&amp;amp;q=rust&amp;amp;starCount=0&quot;&gt;DockerHub&lt;/a&gt; but no official&lt;sup id=&quot;fnref:7&quot;&gt;&lt;a href=&quot;#fn:7&quot; class=&quot;footnote&quot;&gt;7&lt;/a&gt;&lt;/sup&gt; images yet, so this &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; is built &lt;code class=&quot;highlighter-rouge&quot;&gt;FROM&lt;/code&gt; the official &lt;code class=&quot;highlighter-rouge&quot;&gt;debian&lt;/code&gt;&lt;sup id=&quot;fnref:8&quot;&gt;&lt;a href=&quot;#fn:8&quot; class=&quot;footnote&quot;&gt;8&lt;/a&gt;&lt;/sup&gt; image and installs &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; from source.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM debian:jessie
+
+ENV RUST_VERSION=1.19.0
+ENV RUST_TARGET=x86_64-unknown-linux-gnu
+
+RUN \
+  # Install tools needed from the package manager
+  apt-get update &amp;amp;&amp;amp; \
+  DEBIAN_FRONTEND=noninteractive \
+  apt-get install -y \
+    ca-certificates \
+    curl \
+    build-essential \
+    gcc &amp;amp;&amp;amp; \
+
+  # Use curl to download and install rust
+  curl \
+    -sO \
+    https://static.rust-lang.org/dist/rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
+    &amp;amp;&amp;amp; \
+  tar -xzf rust-$RUST_VERSION-$RUST_TARGET.tar.gz &amp;amp;&amp;amp; \
+  ./rust-$RUST_VERSION-$RUST_TARGET/install.sh --without=rust-docs &amp;amp;&amp;amp; \
+
+  # Cleanup by removing files and utilities that are no longer needed
+  DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y curl &amp;amp;&amp;amp; \
+  rm -rf \
+    ./rust-$RUST_VERSION-$RUST_TARGET \
+    rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
+    /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/*
+
+# Creating a directory to work from
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Copy our app into that directory
+COPY . /usr/src/app
+
+# Build our app
+CMD [&quot;cargo&quot;, &quot;build&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; that we’ve created is great, it installs rust and its default command is to build our application, lets put it through its paces by setting up a new application for development:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Drop the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; into an empty directory&lt;/li&gt;
+  &lt;li&gt;Build the image and tag it with a name we can use to reference it later:
+ &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build -t my-rust-app-image .&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Once the image is built create a new project with &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; (in the current directory):
+    &lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; docker run &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+   --rm &lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;                                 &lt;span class=&quot;c&quot;&gt;# declutter!&lt;/span&gt;
+   -e &lt;span class=&quot;nv&quot;&gt;USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Super Dev'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;                  &lt;span class=&quot;c&quot;&gt;# an env var for cargo init&lt;/span&gt;
+   my-rust-app-image &lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;                    &lt;span class=&quot;c&quot;&gt;# Our image name&lt;/span&gt;
+   cargo init --bin --name the-best-app-rs &lt;span class=&quot;c&quot;&gt;# Override default command&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;If you do this you’ll notice that the command seems to execute succesfully but when you check the filesystem there are &lt;strong&gt;no new files&lt;/strong&gt; created. This is because the files that we created with &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; were created during the fleeting existance of the container and existed only within its filesystem. In order to persist the files on the host filesystem we need to mount the host filesystem into the container with a &lt;a href=&quot;https://docs.docker.com/engine/admin/volumes/volumes/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Our new command looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  --rm &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  -e &lt;span class=&quot;nv&quot;&gt;USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Super Dev'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  -v &lt;span class=&quot;nv&quot;&gt;$PWD&lt;/span&gt;:/usr/src/app     &lt;span class=&quot;c&quot;&gt;# Special Sauce; mount the host working directory&lt;/span&gt;
+  my-rust-app-image &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  cargo init --bin --name the-best-app-rs
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And now running it produces the desired effect, we have initialized a new &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; project in the current working directory on the host machine.&lt;/p&gt;
+
+&lt;h4 id=&quot;composed-crustaceans&quot;&gt;Composed C&lt;strong&gt;rust&lt;/strong&gt;aceans&lt;/h4&gt;
+&lt;p&gt;We could continue to develop our application with &lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt; but our command is a bit tedious to say the least. &lt;a href=&quot;https://docs.docker.com/compose/&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Compose&lt;/code&gt;&lt;/a&gt; solves this problem for us: it abstracts the &lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt; command so that we can deal with a much more agreeable &lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt; file. Let’s add a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; to our new project:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.0'&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;bin&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.&lt;/span&gt;
+      &lt;span class=&quot;s&quot;&gt;dockerfile&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Dockerfile&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cargo test&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.:/usr/src/app&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry:/root/.cargo/registry&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Secret Sauce&lt;/span&gt;
+
+&lt;span class=&quot;s&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;s&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;local&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now with this configuration&lt;sup id=&quot;fnref:9&quot;&gt;&lt;a href=&quot;#fn:9&quot; class=&quot;footnote&quot;&gt;9&lt;/a&gt;&lt;/sup&gt; in place we can execute:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose run --rm bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and a container will start based on our image and &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo test&lt;/code&gt; will run the tests for our application; this is great for our development cycle because &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo test&lt;/code&gt; will &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; our application if there have been any changes since the last build and because &lt;em&gt;we’re definitley writing tests&lt;/em&gt; and we want them to run as well. Once the the container has finished the daemon will cleanup the container because we passed the &lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt; flag.&lt;sup id=&quot;fnref:10&quot;&gt;&lt;a href=&quot;#fn:10&quot; class=&quot;footnote&quot;&gt;10&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;extra-special-sauce&quot;&gt;Extra Special Sauce&lt;/h4&gt;
+&lt;p&gt;You’ll notice in the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; above that we add a volume that gets mounted into the container at &lt;code class=&quot;highlighter-rouge&quot;&gt;/root/.cargo/registry&lt;/code&gt;; this is where &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; stores &lt;code class=&quot;highlighter-rouge&quot;&gt;crates&lt;/code&gt;&lt;sup id=&quot;fnref:11&quot;&gt;&lt;a href=&quot;#fn:11&quot; class=&quot;footnote&quot;&gt;11&lt;/a&gt;&lt;/sup&gt; our application depends on.&lt;/p&gt;
+
+&lt;p&gt;Adding a volume here rather then adding a &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo build&lt;/code&gt; layer&lt;sup id=&quot;fnref:12&quot;&gt;&lt;a href=&quot;#fn:12&quot; class=&quot;footnote&quot;&gt;12&lt;/a&gt;&lt;/sup&gt; to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; prevents us from needing to rebuild the image after each change to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Cargo.toml&lt;/code&gt;. We can continue to develop normally and when &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; installs a new &lt;code class=&quot;highlighter-rouge&quot;&gt;crate&lt;/code&gt; it will be cached for us in the &lt;code class=&quot;highlighter-rouge&quot;&gt;registry&lt;/code&gt; volume.&lt;/p&gt;
+
+&lt;h4 id=&quot;fini&quot;&gt;fini&lt;/h4&gt;
+&lt;p&gt;Now that we’re done we have a &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; that describes the filesystem our application needs and a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; that helps us by adding some nifty cacheing and mounting our working directory into the container so that we can see our code changes in real time. There’s definitley some work that can be done to make this better (maybe &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo test&lt;/code&gt; is a better default command for the image) but it’s a decent start and our process can begin to enjoy its new digs.&lt;/p&gt;
+
+&lt;p&gt;The example files can be found here: &lt;a href=&quot;https://github.com/blankenshipz/docker-rust-example&quot;&gt;blankenshipz/docker-rust-example&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;The community has come a long way! &lt;code class=&quot;highlighter-rouge&quot;&gt;boot2docker&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;dinghy&lt;/code&gt; and now &lt;a href=&quot;https://www.docker.com/docker-mac&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker For Mac&lt;/code&gt;&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rustup&lt;/code&gt; &lt;a href=&quot;https://github.com/rust-lang-nursery/rustup.rs#how-rustup-works&quot;&gt;refers&lt;/a&gt; to these sorts of utilities as “toolchain multiplexers”&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot;&gt;
+      &lt;p&gt;The switch can occur as a result of a user command, an environment variable, or a file: &lt;code class=&quot;highlighter-rouge&quot;&gt;.rustup-toolchain&lt;/code&gt;. For a complete list &lt;a href=&quot;https://github.com/rust-lang-nursery/rustup.rs#override-precedence&quot;&gt;see the docs&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:4&quot;&gt;
+      &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;touch foo&lt;/code&gt;&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:5&quot;&gt;
+      &lt;p&gt;If you’re interested in how &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; creates/runs containers take a look at &lt;a href=&quot;https://github.com/opencontainers/runc&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;runc&lt;/code&gt;&lt;/a&gt;: my current understanding is that the main parameters to &lt;code class=&quot;highlighter-rouge&quot;&gt;runc&lt;/code&gt; are as simple as a “command” and a filesystem. It does the heavy lifting of process isoloation/namespacing.&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:6&quot;&gt;
+      &lt;p&gt;The Dockerfile &lt;a href=&quot;https://docs.docker.com/engine/reference/builder/&quot;&gt;Reference&lt;/a&gt; and &lt;a href=&quot;https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/&quot;&gt;Best Practices&lt;/a&gt; are excellent resources to learn more about crafting images.&amp;nbsp;&lt;a href=&quot;#fnref:6&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:7&quot;&gt;
+      &lt;p&gt;You can learn more about “official” images &lt;a href=&quot;https://docs.docker.com/docker-hub/official_repos/&quot;&gt;here&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:8&quot;&gt;
+      &lt;p&gt;Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using &lt;code class=&quot;highlighter-rouge&quot;&gt;debian&lt;/code&gt; here a better alternative would be the minimalist distro &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; - according to &lt;a href=&quot;https://github.com/andrew-d/docker-rust-musl/issues/7&quot;&gt;this issue&lt;/a&gt; it should be possible to now install &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; directly from the &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; package manger.&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:9&quot;&gt;
+      &lt;p&gt;You may have noticed that I choose &lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt; as the name of our service; I’ve found that it’s best when moving between projects to keep the names of services conventional and because &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; uses the terminology &lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt; I’ve found that those are the best names to use in a &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo &lt;/code&gt;project.&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:10&quot;&gt;
+      &lt;p&gt;Cleaning up is important here because each time we issue a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt; a &lt;strong&gt;new&lt;/strong&gt; container is created, if we dont’ remove it we’ll end up with a bunch of orphaned containers on our system.&amp;nbsp;&lt;a href=&quot;#fnref:10&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:11&quot;&gt;
+      &lt;p&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;crate&lt;/code&gt; much like a &lt;code class=&quot;highlighter-rouge&quot;&gt;gem&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt; is an external library, check out &lt;a href=&quot;https://crates.io&quot;&gt;crates.io&lt;/a&gt; for more information.&amp;nbsp;&lt;a href=&quot;#fnref:11&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:12&quot;&gt;
+      &lt;p&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; “image” is a Union Filesystem where each of the statements in the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; create a &lt;code class=&quot;highlighter-rouge&quot;&gt;layer&lt;/code&gt; and any changes at a specific &lt;code class=&quot;highlighter-rouge&quot;&gt;layer&lt;/code&gt; invalidate the following layers requiring new layers to be created for that part of the image. &lt;a href=&quot;https://docs.docker.com/engine/userguide/storagedriver/imagesandcontainers/&quot;&gt;Here is a much better explanation&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:12&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sat, 12 Aug 2017 13:28:00 -0500</pubDate>
+        <link>http://blankenshipz.com//docker/rust/2017/08/12/contained-crustaceans/</link>
+        <guid isPermaLink="true">http://blankenshipz.com//docker/rust/2017/08/12/contained-crustaceans/</guid>
+      </item>
+    
   </channel>
 </rss>

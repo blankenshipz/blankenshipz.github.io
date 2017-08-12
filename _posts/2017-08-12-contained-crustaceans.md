@@ -2,6 +2,7 @@
 layout: post
 title: Contained Crustaceans
 date: 2017-08-12 13:28
+comments: true
 summary: Setting up a development environment with docker for rust
 categories: docker rust
 ---

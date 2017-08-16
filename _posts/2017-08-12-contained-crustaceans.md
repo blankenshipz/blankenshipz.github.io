@@ -19,40 +19,10 @@ Although this type of context switching can be extremely useful it is unlikely t
 #### My Container is Rusting... 
 We can containerize `rust` applications to reep the benefits of our beach life (hopefully without the sand) and to do so all we really need is a `Dockerfile`[^6]. If you haven't installed `Docker` yet take a second to [visit the docs](https://docs.docker.com/engine/installation/) for installation instructions for your system. 
 
-There are several prebuilt images for rust available on the [DockerHub](https://hub.docker.com/search/?isAutomated=0&isOfficial=0&page=1&pullCount=0&q=rust&starCount=0) but no official[^7] images yet, so this `Dockerfile` is built `FROM` the official `debian`[^8] image and installs `rust` from source. 
+There are several prebuilt images for rust available on the [DockerHub](https://hub.docker.com/search/?isAutomated=0&isOfficial=0&page=1&pullCount=0&q=rust&starCount=0) to choose from however [fairly recently](https://github.com/docker-library/official-images/pull/3273) an official[^7] [image](https://hub.docker.com/_/rust/) has been released by the `rust` community. The following `Dockerfile` is built `FROM` the official `rust`[^8] image.
 
 ```Dockerfile
-FROM debian:jessie
-
-ENV RUST_VERSION=1.19.0
-ENV RUST_TARGET=x86_64-unknown-linux-gnu
-
-RUN \
-  # Install tools needed from the package manager
-  apt-get update && \
-  DEBIAN_FRONTEND=noninteractive \
-  apt-get install -y \
-    ca-certificates \
-    curl \
-    build-essential \
-    gcc && \
-
-  # Use curl to download and install rust
-  curl \
-    -sO \
-    https://static.rust-lang.org/dist/rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    && \
-  tar -xzf rust-$RUST_VERSION-$RUST_TARGET.tar.gz && \
-  ./rust-$RUST_VERSION-$RUST_TARGET/install.sh --without=rust-docs && \
-
-  # Cleanup by removing files and utilities that are no longer needed
-  DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y curl && \
-  rm -rf \
-    ./rust-$RUST_VERSION-$RUST_TARGET \
-    rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    /var/lib/apt/lists/* \
-    /tmp/* \
-    /var/tmp/*
+FROM rust
 
 # Creating a directory to work from
 RUN mkdir -p /usr/src/app
@@ -65,7 +35,7 @@ COPY . /usr/src/app
 CMD ["cargo", "build"]
 ```
 
-This `image` that we've created is great, it installs rust and its default command is to build our application, lets put it through its paces by setting up a new application for development:
+This `Dockerfile` is elegant in its simplicity; it uses the `rust` image as its base, it copies over our code and its default command is to build our application. Lets put it through its paces by setting up a new application for development:
 
 1. Drop the `Dockerfile` into an empty directory
 2. Build the image and tag it with a name we can use to reference it later:
@@ -140,7 +110,7 @@ The example files can be found here: [blankenshipz/docker-rust-example](https://
 [^5]: If you're interested in how `Docker` creates/runs containers take a look at [`runc`](https://github.com/opencontainers/runc): my current understanding is that the main parameters to `runc` are as simple as a "command" and a filesystem. It does the heavy lifting of process isoloation/namespacing.
 [^6]: The Dockerfile [Reference](https://docs.docker.com/engine/reference/builder/) and [Best Practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/) are excellent resources to learn more about crafting images.
 [^7]: You can learn more about "official" images [here](https://docs.docker.com/docker-hub/official_repos/)
-[^8]: Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using `debian` here a better alternative would be the minimalist distro `alpine` - according to [this issue](https://github.com/andrew-d/docker-rust-musl/issues/7) it should be possible to now install `rust` directly from the `alpine` package manger.
+[^8]: Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using the `rust` image here which is currently based on `debian` an alternative would be to use the minimalist distro `alpine` - according to [this issue](https://github.com/andrew-d/docker-rust-musl/issues/7) it should be possible to now install `rust` directly from the `alpine` package manger.
 [^9]: You may have noticed that I choose `bin` as the name of our service; I've found that it's best when moving between projects to keep the names of services conventional and because `cargo` uses the terminology `bin` and `lib` I've found that those are the best names to use in a `cargo `project.
 [^10]: Cleaning up is important here because each time we issue a `docker run` a **new** container is created, if we dont' remove it we'll end up with a bunch of orphaned containers on our system.
 [^11]: A `crate` much like a `gem` in `ruby` is an external library, check out [crates.io](https://crates.io) for more information.

@@ -26,39 +26,9 @@
 <h4 id="my-container-is-rusting">My Container is Rusting…</h4>
 <p>We can containerize <code class="highlighter-rouge">rust</code> applications to reep the benefits of our beach life (hopefully without the sand) and to do so all we really need is a <code class="highlighter-rouge">Dockerfile</code><sup id="fnref:6"><a href="#fn:6" class="footnote">6</a></sup>. If you haven’t installed <code class="highlighter-rouge">Docker</code> yet take a second to <a href="https://docs.docker.com/engine/installation/">visit the docs</a> for installation instructions for your system.</p>
 
-<p>There are several prebuilt images for rust available on the <a href="https://hub.docker.com/search/?isAutomated=0&amp;isOfficial=0&amp;page=1&amp;pullCount=0&amp;q=rust&amp;starCount=0">DockerHub</a> but no official<sup id="fnref:7"><a href="#fn:7" class="footnote">7</a></sup> images yet, so this <code class="highlighter-rouge">Dockerfile</code> is built <code class="highlighter-rouge">FROM</code> the official <code class="highlighter-rouge">debian</code><sup id="fnref:8"><a href="#fn:8" class="footnote">8</a></sup> image and installs <code class="highlighter-rouge">rust</code> from source.</p>
+<p>There are several prebuilt images for rust available on the <a href="https://hub.docker.com/search/?isAutomated=0&amp;isOfficial=0&amp;page=1&amp;pullCount=0&amp;q=rust&amp;starCount=0">DockerHub</a> to choose from however <a href="https://github.com/docker-library/official-images/pull/3273">fairly recently</a> an official<sup id="fnref:7"><a href="#fn:7" class="footnote">7</a></sup> <a href="https://hub.docker.com/_/rust/">image</a> has been released by the <code class="highlighter-rouge">rust</code> community. The following <code class="highlighter-rouge">Dockerfile</code> is built <code class="highlighter-rouge">FROM</code> the official <code class="highlighter-rouge">rust</code><sup id="fnref:8"><a href="#fn:8" class="footnote">8</a></sup> image.</p>
 
-<pre><code class="language-Dockerfile">FROM debian:jessie
-
-ENV RUST_VERSION=1.19.0
-ENV RUST_TARGET=x86_64-unknown-linux-gnu
-
-RUN \
-  # Install tools needed from the package manager
-  apt-get update &amp;&amp; \
-  DEBIAN_FRONTEND=noninteractive \
-  apt-get install -y \
-    ca-certificates \
-    curl \
-    build-essential \
-    gcc &amp;&amp; \
-
-  # Use curl to download and install rust
-  curl \
-    -sO \
-    https://static.rust-lang.org/dist/rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    &amp;&amp; \
-  tar -xzf rust-$RUST_VERSION-$RUST_TARGET.tar.gz &amp;&amp; \
-  ./rust-$RUST_VERSION-$RUST_TARGET/install.sh --without=rust-docs &amp;&amp; \
-
-  # Cleanup by removing files and utilities that are no longer needed
-  DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y curl &amp;&amp; \
-  rm -rf \
-    ./rust-$RUST_VERSION-$RUST_TARGET \
-    rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    /var/lib/apt/lists/* \
-    /tmp/* \
-    /var/tmp/*
+<pre><code class="language-Dockerfile">FROM rust
 
 # Creating a directory to work from
 RUN mkdir -p /usr/src/app
@@ -71,7 +41,7 @@ COPY . /usr/src/app
 CMD ["cargo", "build"]
 </code></pre>
 
-<p>This <code class="highlighter-rouge">image</code> that we’ve created is great, it installs rust and its default command is to build our application, lets put it through its paces by setting up a new application for development:</p>
+<p>This <code class="highlighter-rouge">Dockerfile</code> is elegant in its simplicity; it uses the <code class="highlighter-rouge">rust</code> image as its base, it copies over our code and its default command is to build our application. Lets put it through its paces by setting up a new application for development:</p>
 
 <ol>
   <li>Drop the <code class="highlighter-rouge">Dockerfile</code> into an empty directory</li>
@@ -166,7 +136,7 @@ CMD ["cargo", "build"]
       <p>You can learn more about “official” images <a href="https://docs.docker.com/docker-hub/official_repos/">here</a>&nbsp;<a href="#fnref:7" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:8">
-      <p>Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using <code class="highlighter-rouge">debian</code> here a better alternative would be the minimalist distro <code class="highlighter-rouge">alpine</code> - according to <a href="https://github.com/andrew-d/docker-rust-musl/issues/7">this issue</a> it should be possible to now install <code class="highlighter-rouge">rust</code> directly from the <code class="highlighter-rouge">alpine</code> package manger.&nbsp;<a href="#fnref:8" class="reversefootnote">&#8617;</a></p>
+      <p>Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using the <code class="highlighter-rouge">rust</code> image here which is currently based on <code class="highlighter-rouge">debian</code> an alternative would be to use the minimalist distro <code class="highlighter-rouge">alpine</code> - according to <a href="https://github.com/andrew-d/docker-rust-musl/issues/7">this issue</a> it should be possible to now install <code class="highlighter-rouge">rust</code> directly from the <code class="highlighter-rouge">alpine</code> package manger.&nbsp;<a href="#fnref:8" class="reversefootnote">&#8617;</a></p>
     </li>
     <li id="fn:9">
       <p>You may have noticed that I choose <code class="highlighter-rouge">bin</code> as the name of our service; I’ve found that it’s best when moving between projects to keep the names of services conventional and because <code class="highlighter-rouge">cargo</code> uses the terminology <code class="highlighter-rouge">bin</code> and <code class="highlighter-rouge">lib</code> I’ve found that those are the best names to use in a <code class="highlighter-rouge">cargo </code>project.&nbsp;<a href="#fnref:9" class="reversefootnote">&#8617;</a></p>

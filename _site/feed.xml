@@ -21,39 +21,9 @@
 &lt;h4 id=&quot;my-container-is-rusting&quot;&gt;My Container is Rusting…&lt;/h4&gt;
 &lt;p&gt;We can containerize &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; applications to reep the benefits of our beach life (hopefully without the sand) and to do so all we really need is a &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;&lt;sup id=&quot;fnref:6&quot;&gt;&lt;a href=&quot;#fn:6&quot; class=&quot;footnote&quot;&gt;6&lt;/a&gt;&lt;/sup&gt;. If you haven’t installed &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt; yet take a second to &lt;a href=&quot;https://docs.docker.com/engine/installation/&quot;&gt;visit the docs&lt;/a&gt; for installation instructions for your system.&lt;/p&gt;
 
-&lt;p&gt;There are several prebuilt images for rust available on the &lt;a href=&quot;https://hub.docker.com/search/?isAutomated=0&amp;amp;isOfficial=0&amp;amp;page=1&amp;amp;pullCount=0&amp;amp;q=rust&amp;amp;starCount=0&quot;&gt;DockerHub&lt;/a&gt; but no official&lt;sup id=&quot;fnref:7&quot;&gt;&lt;a href=&quot;#fn:7&quot; class=&quot;footnote&quot;&gt;7&lt;/a&gt;&lt;/sup&gt; images yet, so this &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; is built &lt;code class=&quot;highlighter-rouge&quot;&gt;FROM&lt;/code&gt; the official &lt;code class=&quot;highlighter-rouge&quot;&gt;debian&lt;/code&gt;&lt;sup id=&quot;fnref:8&quot;&gt;&lt;a href=&quot;#fn:8&quot; class=&quot;footnote&quot;&gt;8&lt;/a&gt;&lt;/sup&gt; image and installs &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; from source.&lt;/p&gt;
+&lt;p&gt;There are several prebuilt images for rust available on the &lt;a href=&quot;https://hub.docker.com/search/?isAutomated=0&amp;amp;isOfficial=0&amp;amp;page=1&amp;amp;pullCount=0&amp;amp;q=rust&amp;amp;starCount=0&quot;&gt;DockerHub&lt;/a&gt; to choose from however &lt;a href=&quot;https://github.com/docker-library/official-images/pull/3273&quot;&gt;fairly recently&lt;/a&gt; an official&lt;sup id=&quot;fnref:7&quot;&gt;&lt;a href=&quot;#fn:7&quot; class=&quot;footnote&quot;&gt;7&lt;/a&gt;&lt;/sup&gt; &lt;a href=&quot;https://hub.docker.com/_/rust/&quot;&gt;image&lt;/a&gt; has been released by the &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; community. The following &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; is built &lt;code class=&quot;highlighter-rouge&quot;&gt;FROM&lt;/code&gt; the official &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt;&lt;sup id=&quot;fnref:8&quot;&gt;&lt;a href=&quot;#fn:8&quot; class=&quot;footnote&quot;&gt;8&lt;/a&gt;&lt;/sup&gt; image.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM debian:jessie
-
-ENV RUST_VERSION=1.19.0
-ENV RUST_TARGET=x86_64-unknown-linux-gnu
-
-RUN \
-  # Install tools needed from the package manager
-  apt-get update &amp;amp;&amp;amp; \
-  DEBIAN_FRONTEND=noninteractive \
-  apt-get install -y \
-    ca-certificates \
-    curl \
-    build-essential \
-    gcc &amp;amp;&amp;amp; \
-
-  # Use curl to download and install rust
-  curl \
-    -sO \
-    https://static.rust-lang.org/dist/rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    &amp;amp;&amp;amp; \
-  tar -xzf rust-$RUST_VERSION-$RUST_TARGET.tar.gz &amp;amp;&amp;amp; \
-  ./rust-$RUST_VERSION-$RUST_TARGET/install.sh --without=rust-docs &amp;amp;&amp;amp; \
-
-  # Cleanup by removing files and utilities that are no longer needed
-  DEBIAN_FRONTEND=noninteractive apt-get remove --purge -y curl &amp;amp;&amp;amp; \
-  rm -rf \
-    ./rust-$RUST_VERSION-$RUST_TARGET \
-    rust-$RUST_VERSION-$RUST_TARGET.tar.gz \
-    /var/lib/apt/lists/* \
-    /tmp/* \
-    /var/tmp/*
+&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;FROM rust
 
 # Creating a directory to work from
 RUN mkdir -p /usr/src/app
@@ -66,7 +36,7 @@ COPY . /usr/src/app
 CMD [&quot;cargo&quot;, &quot;build&quot;]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; that we’ve created is great, it installs rust and its default command is to build our application, lets put it through its paces by setting up a new application for development:&lt;/p&gt;
+&lt;p&gt;This &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; is elegant in its simplicity; it uses the &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; image as its base, it copies over our code and its default command is to build our application. Lets put it through its paces by setting up a new application for development:&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Drop the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; into an empty directory&lt;/li&gt;
@@ -161,7 +131,7 @@ CMD [&quot;cargo&quot;, &quot;build&quot;]
       &lt;p&gt;You can learn more about “official” images &lt;a href=&quot;https://docs.docker.com/docker-hub/official_repos/&quot;&gt;here&lt;/a&gt;&amp;nbsp;&lt;a href=&quot;#fnref:7&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li id=&quot;fn:8&quot;&gt;
-      &lt;p&gt;Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using &lt;code class=&quot;highlighter-rouge&quot;&gt;debian&lt;/code&gt; here a better alternative would be the minimalist distro &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; - according to &lt;a href=&quot;https://github.com/andrew-d/docker-rust-musl/issues/7&quot;&gt;this issue&lt;/a&gt; it should be possible to now install &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; directly from the &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; package manger.&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;Typically the authors of docker images attempt to shrink the size of the image if at all possible, rather then using the &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; image here which is currently based on &lt;code class=&quot;highlighter-rouge&quot;&gt;debian&lt;/code&gt; an alternative would be to use the minimalist distro &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; - according to &lt;a href=&quot;https://github.com/andrew-d/docker-rust-musl/issues/7&quot;&gt;this issue&lt;/a&gt; it should be possible to now install &lt;code class=&quot;highlighter-rouge&quot;&gt;rust&lt;/code&gt; directly from the &lt;code class=&quot;highlighter-rouge&quot;&gt;alpine&lt;/code&gt; package manger.&amp;nbsp;&lt;a href=&quot;#fnref:8&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
     &lt;li id=&quot;fn:9&quot;&gt;
       &lt;p&gt;You may have noticed that I choose &lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt; as the name of our service; I’ve found that it’s best when moving between projects to keep the names of services conventional and because &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo&lt;/code&gt; uses the terminology &lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt; I’ve found that those are the best names to use in a &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo &lt;/code&gt;project.&amp;nbsp;&lt;a href=&quot;#fnref:9&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;

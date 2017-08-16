@@ -17,7 +17,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Opus" href="//feed.xml" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="//css/pixyll.css?201708121526" type="text/css">
+    <link rel="stylesheet" href="//css/pixyll.css?201708160937" type="text/css">
 
     <!-- Fonts -->
     
@@ -133,7 +133,7 @@
 </div>
 
 <article class="post-content">
-  <p>While <a href="http://www.rustacean.net/">Ferris</a> the crab is a <a href="https://www.britannica.com/animal/crustacean">crustacean</a> and  <a href="https://blog.docker.com/2013/10/call-me-moby-dock/">Moby Dock</a>, the whale, is a mammal; they’re both marine life and they share the moniker of “cartoon” putting them in a category where it might benefit them to stick together!</p>
+  <p><a href="http://www.rustacean.net/">Ferris</a> the crab is a <a href="https://www.britannica.com/animal/crustacean">crustacean</a> and  <a href="https://blog.docker.com/2013/10/call-me-moby-dock/">Moby Dock</a>, the whale, is a mammal. These mascots are both marine life and they share the moniker of “cartoon” - putting them in an interesting subcategory where it might benefit them to stick together! Let’s spend a few minutes bringing them even closer together as we discuss setting up a development environment in <a href="https://www.docker.com/"><code class="highlighter-rouge">Docker</code></a>  for building applications in the <a href="rust-lang.org"><code class="highlighter-rouge">Rust</code></a> programming language.</p>
 
 <h4 id="environmental-concerns">Environmental Concerns</h4>
 <p>I’ve been using versions of the <code class="highlighter-rouge">Docker</code> toolchain in development for a few years now<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>, and overall I’ve enjoyed the experience. It’s a great way to create a consistent environment for your application (and your peers). When I first started developing with <code class="highlighter-rouge">ruby</code> it was common practice to use something like <a href="https://rvm.io/"><code class="highlighter-rouge">rvm</code></a> or <a href="https://github.com/rbenv/rbenv"><code class="highlighter-rouge">rbenv</code></a> to contextually switch <code class="highlighter-rouge">ruby</code> versions based on some configuration in the application. The <code class="highlighter-rouge">rust</code> community has something similair with <a href="https://github.com/rust-lang-nursery/rustup.rs"><code class="highlighter-rouge">rustup</code></a><sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup> it provides a way to switch<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> the version of <code class="highlighter-rouge">rust</code> so that the application can be appropriatly compiled with the intended version of the compiler.</p>

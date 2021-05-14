@@ -148,7 +148,7 @@ CMD [&quot;cargo&quot;, &quot;build&quot;]
   &lt;/ol&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sat, 12 Aug 2017 13:28:00 -0500</pubDate>
+        <pubDate>Sat, 12 Aug 2017 13:28:00 -0700</pubDate>
         <link>http://blankenshipz.com//docker/rust/2017/08/12/contained-crustaceans/</link>
         <guid isPermaLink="true">http://blankenshipz.com//docker/rust/2017/08/12/contained-crustaceans/</guid>
       </item>

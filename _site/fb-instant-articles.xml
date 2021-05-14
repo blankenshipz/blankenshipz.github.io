@@ -161,7 +161,7 @@ CMD ["cargo", "build"]
                     Setting up a development environment with docker for rust
                     
                 </description>
-                <pubDate>Sat, 12 Aug 2017 13:28:00 -0500</pubDate>
+                <pubDate>Sat, 12 Aug 2017 13:28:00 -0700</pubDate>
                 <author>Zach Blankenship</author>
             </item>
         

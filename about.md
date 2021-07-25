@@ -5,8 +5,6 @@ permalink: /about/
 tags: about
 ---
 
-# About
-
 👋 I'm Zach; I've spent the last decade of my career working on Engineering problems for businesses spanning from small non-profits to major multinational corporations. In recent years my primary focus has been on developing and deploying infrastructure. If pressed I would say that I'm a Software Engineer stuck in a "DevOps" world.
 
 I'm really terrible about maintaining a blog; as of this writing (07/21) the only entry I have is from 2017 - Let's hope that 2021 is a good year for creating content! 🤞

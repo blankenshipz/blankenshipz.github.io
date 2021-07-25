@@ -5,7 +5,7 @@ permalink: /about/
 tags: about
 ---
 
-![A picture of me](/assets/me.jpg)
+![A picture of me](/images/me.jpg)
 
 👋 I'm Zach; I've spent the last decade of my career working on Engineering problems for businesses spanning from small non-profits to major multinational corporations. In recent years my primary focus has been on developing and deploying infrastructure. If pressed I would say that I'm a Software Engineer stuck in a "DevOps" world.
 
